@@ -115,7 +115,7 @@
 								for (Category c : list) {
 							%>
 									<tr class="align-middle">
-										<td><img class="img-fluid border" src="<%=request.getContextPath()%>/image/<%=c.getCategoryPic()%>" style="height: 24pt"></td>
+										<td><img class="border" src="<%=request.getContextPath()%>/image/<%=c.getCategoryPic()%>" style="width:24pt;height: 24pt;"></td>
 										<td><%=c.getCategoryName() %></td>
 										<td><a class="text-primary" href="<%=request.getContextPath()%>/category/editCategoryPic.jsp?categoryId=<%=c.getCategoryId()%>">이미지 수정</a></td>
 										<td><a class="text-warning" href="<%=request.getContextPath()%>/category/editCategory.jsp?categoryId=<%=c.getCategoryId()%>">수정</a></td>
