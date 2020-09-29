@@ -85,6 +85,29 @@
 								}
 							%>
 						</form>
+						
+						<hr>
+						
+						<h5 class="text-secondary font-weight-lighter mb-3">개발자 도구</h5>
+						<div class="row">
+							<div class="col">
+								<form method="post" action="<%=request.getContextPath()%>/loginAction.jsp">
+									<input type="hidden" name="adminEmail" value="admin@goodee.com">
+									<input type="hidden" name="adminPw" value="1234">
+									
+									<button class="btn btn-success btn-block" type="submit">ID: admin@goodee.com<br>PW: 1234<br>클릭하여 로그인</button>
+								</form>
+							</div>
+							
+							<div class="col">
+								<form method="post" action="<%=request.getContextPath()%>/loginAction.jsp">
+									<input type="hidden" name="adminEmail" value="goodee@goodee.com"">
+									<input type="hidden" name="adminPw" value="1234">
+									
+									<button class="btn btn-success btn-block" type="submit">ID: goodee@goodee.com<br>PW: 1234<br>클릭하여 로그인</button>
+								</form>
+							</div>
+						</div>
 					</div>
 				</div>
 			</p>

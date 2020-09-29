@@ -112,7 +112,7 @@
 											
 											int countAllOrdersState = ordersDao.selectOrdersCountWithSearch(paramOAPSearchAllOrdersState);
 										%>
-										<option value="">전체 주문 목록 (<%=countAllOrdersState %>)</option>
+										<option value="">전체 상태 (<%=countAllOrdersState %>)</option>
 										<%
 											ArrayList<String> ordersStateList = ordersDao.selectOrdersStateListExist();
 											for (String ordersState : ordersStateList) {
