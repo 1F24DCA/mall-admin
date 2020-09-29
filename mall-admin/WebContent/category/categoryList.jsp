@@ -94,8 +94,9 @@
 					<table class="table table-striped">
 						<thead>
 							<tr>
-								<th>번호</th>
-								<th class="w-75">카테고리 이름</th>
+								<th>&nbsp;</th>
+								<th class="w-50">카테고리 이름</th>
+								<th>&nbsp;</th>
 								<th>&nbsp;</th>
 								<th>&nbsp;</th>
 							</tr>
@@ -113,9 +114,10 @@
 							
 								for (Category c : list) {
 							%>
-									<tr>
-										<td><%=c.getCategoryId() %></td>
+									<tr class="align-middle">
+										<td><img class="img-fluid border" src="<%=request.getContextPath()%>/image/<%=c.getCategoryPic()%>" style="height: 24pt"></td>
 										<td><%=c.getCategoryName() %></td>
+										<td><a class="text-primary" href="<%=request.getContextPath()%>/category/editCategoryPic.jsp?categoryId=<%=c.getCategoryId()%>">이미지 수정</a></td>
 										<td><a class="text-warning" href="<%=request.getContextPath()%>/category/editCategory.jsp?categoryId=<%=c.getCategoryId()%>">수정</a></td>
 										<td><a class="text-danger" href="<%=request.getContextPath()%>/category/deleteCategory.jsp?categoryId=<%=c.getCategoryId()%>">삭제</a></td>
 									</tr>

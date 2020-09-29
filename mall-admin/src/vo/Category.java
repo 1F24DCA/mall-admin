@@ -3,6 +3,7 @@ package vo;
 public class Category {
 	private int categoryId;
 	private String categoryName;
+	private String categoryPic;
 	
 	public int getCategoryId() {
 		return this.categoryId;
@@ -15,5 +16,11 @@ public class Category {
 	}
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
+	}
+	public String getCategoryPic() {
+		return this.categoryPic;
+	}
+	public void setCategoryPic(String categoryPic) {
+		this.categoryPic = categoryPic;
 	}
 }

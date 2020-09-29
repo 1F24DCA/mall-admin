@@ -14,7 +14,7 @@ public class CategoryDao {
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
 		
-		String sql = "SELECT category_id, category_name FROM category";
+		String sql = "SELECT category_id, category_name, category_pic FROM category";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		System.out.println(stmt+"<-stmt");
 		
@@ -23,6 +23,7 @@ public class CategoryDao {
 			Category category = new Category();
 			category.setCategoryId(rs.getInt("category_id"));
 			category.setCategoryName(rs.getString("category_name"));
+			category.setCategoryPic(rs.getString("category_pic"));
 			
 			returnList.add(category);
 		}
@@ -38,7 +39,7 @@ public class CategoryDao {
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
 		
-		String sql = "SELECT category_id, category_name FROM category LIMIT ?, ?";
+		String sql = "SELECT category_id, category_name, category_pic FROM category LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, listPage.getQueryIndex());
 		stmt.setInt(2, listPage.getRowPerPage());
@@ -49,6 +50,7 @@ public class CategoryDao {
 			Category category = new Category();
 			category.setCategoryId(rs.getInt("category_id"));
 			category.setCategoryName(rs.getString("category_name"));
+			category.setCategoryPic(rs.getString("category_pic"));
 			
 			returnList.add(category);
 		}
@@ -84,7 +86,7 @@ public class CategoryDao {
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
 		
-		String sql = "SELECT category_id, category_name FROM category WHERE category_name LIKE ?";
+		String sql = "SELECT category_id, category_name, category_pic FROM category WHERE category_name LIKE ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, "%"+paramCategory.getCategoryName()+"%");
 		System.out.println(stmt+"<-stmt");
@@ -94,6 +96,7 @@ public class CategoryDao {
 			Category category = new Category();
 			category.setCategoryId(rs.getInt("category_id"));
 			category.setCategoryName(rs.getString("category_name"));
+			category.setCategoryPic(rs.getString("category_pic"));
 			
 			returnList.add(category);
 		}
@@ -109,7 +112,7 @@ public class CategoryDao {
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
 		
-		String sql = "SELECT category_id, category_name FROM category WHERE category_name LIKE ? LIMIT ?, ?";
+		String sql = "SELECT category_id, category_name, category_pic FROM category WHERE category_name LIKE ? LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, "%"+paramCategory.getCategoryName()+"%");
 		stmt.setInt(2, listPage.getQueryIndex());
@@ -121,6 +124,7 @@ public class CategoryDao {
 			Category category = new Category();
 			category.setCategoryId(rs.getInt("category_id"));
 			category.setCategoryName(rs.getString("category_name"));
+			category.setCategoryPic(rs.getString("category_pic"));
 			
 			returnList.add(category);
 		}
@@ -157,7 +161,7 @@ public class CategoryDao {
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
 		
-		String sql = "SELECT category_name FROM category WHERE category_id=?";
+		String sql = "SELECT category_name, category_pic FROM category WHERE category_id=?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, paramCategory.getCategoryId());
 		System.out.println(stmt+"<-stmt");
@@ -166,6 +170,7 @@ public class CategoryDao {
 		if (rs.next()) {
 			returnCategory.setCategoryId(paramCategory.getCategoryId());
 			returnCategory.setCategoryName(rs.getString("category_name"));
+			returnCategory.setCategoryPic(rs.getString("category_pic"));
 		}
 		
 		conn.close();
@@ -194,6 +199,20 @@ public class CategoryDao {
 		String sql = "UPDATE category SET category_name=? WHERE category_id=?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, paramCategory.getCategoryName());
+		stmt.setInt(2, paramCategory.getCategoryId());
+		
+		stmt.executeUpdate();
+		
+		conn.close();
+	}
+	
+	public void updateCategoryPic(Category paramCategory) throws Exception {
+		DBUtil dbUtil = new DBUtil();
+		Connection conn = dbUtil.getConnection();
+		
+		String sql = "UPDATE category SET category_pic=? WHERE category_id=?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, paramCategory.getCategoryPic());
 		stmt.setInt(2, paramCategory.getCategoryId());
 		
 		stmt.executeUpdate();
