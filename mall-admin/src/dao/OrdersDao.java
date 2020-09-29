@@ -7,14 +7,14 @@ import commons.*;
 import vo.*;
 
 public class OrdersDao {
-	public ArrayList<OrdersAndProduct> selectOrdersListWithPage(ListPage listPage) throws Exception {
+	public ArrayList<OrdersAndProduct> selectOrdersListWithPageDesc(ListPage listPage) throws Exception {
 		ArrayList<OrdersAndProduct> returnList = new ArrayList<OrdersAndProduct>();
 
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
 		
 		String sql = "SELECT orders.orders_id, orders.orders_date, orders.product_id, product.product_name, orders.orders_amount, orders.orders_price, orders.member_email, orders.orders_addr, orders.orders_state "
-					+"FROM orders INNER JOIN product ON orders.product_id=product.product_id LIMIT ?, ?";
+					+"FROM orders INNER JOIN product ON orders.product_id=product.product_id ORDER BY orders.orders_id DESC LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, listPage.getQueryIndex());
 		stmt.setInt(2, listPage.getRowPerPage());
@@ -64,14 +64,14 @@ public class OrdersDao {
 		return returnCount;
 	}
 
-	public ArrayList<OrdersAndProduct> selectOrdersListWithPageSearchByOrdersState(ListPage listPage, Orders paramOrders) throws Exception {
+	public ArrayList<OrdersAndProduct> selectOrdersListWithPageDescSearchByOrdersState(ListPage listPage, Orders paramOrders) throws Exception {
 		ArrayList<OrdersAndProduct> returnList = new ArrayList<OrdersAndProduct>();
 
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
 		
 		String sql = "SELECT orders.orders_id, orders.orders_date, orders.product_id, product.product_name, orders.orders_amount, orders.orders_price, orders.member_email, orders.orders_addr "
-					+"FROM orders INNER JOIN product ON orders.product_id=product.product_id WHERE orders_state=? LIMIT ?, ?";
+					+"FROM orders INNER JOIN product ON orders.product_id=product.product_id WHERE orders_state=? ORDER BY orders.orders_id DESC LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, paramOrders.getOrdersState());
 		stmt.setInt(2, listPage.getQueryIndex());

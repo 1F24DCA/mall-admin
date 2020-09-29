@@ -8,14 +8,14 @@ import commons.ListPage;
 import vo.*;
 
 public class ProductDao {
-	public ArrayList<ProductAndCategory> selectProductListWithPage(ListPage listPage) throws Exception {
+	public ArrayList<ProductAndCategory> selectProductListWithPageDesc(ListPage listPage) throws Exception {
 		ArrayList<ProductAndCategory> returnList = new ArrayList<ProductAndCategory>();
 
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
 		
 		String sql = "SELECT product.product_id, product.category_id, category.category_name, product.product_name, product.product_price, product.product_soldout "
-					+"FROM product INNER JOIN category ON product.category_id=category.category_id LIMIT ?, ?";
+					+"FROM product INNER JOIN category ON product.category_id=category.category_id ORDER BY product.product_id DESC LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, listPage.getQueryIndex());
 		stmt.setInt(2, listPage.getRowPerPage());
@@ -61,23 +61,23 @@ public class ProductDao {
 		return returnCount;
 	}
 	
-	public ArrayList<ProductAndCategory> selectProductListWithPageAndSearch(ListPage listPage, Product paramProduct) throws Exception {
+	public ArrayList<ProductAndCategory> selectProductListWithPageDescAndSearch(ListPage listPage, Product paramProduct) throws Exception {
 		if (paramProduct.getCategoryId() == -1 && paramProduct.getProductName().equals("") && paramProduct.getProductSoldout().equals("")) {
-			return selectProductListWithPage(listPage);
+			return selectProductListWithPageDesc(listPage);
 		} else if (paramProduct.getCategoryId() != -1 && paramProduct.getProductName().equals("") && paramProduct.getProductSoldout().equals("")) {
-			return selectProductListWithPageSearchByCategoryId(listPage, paramProduct);
+			return selectProductListWithPageDescSearchByCategoryId(listPage, paramProduct);
 		} else if (paramProduct.getCategoryId() == -1 && !paramProduct.getProductName().equals("") && paramProduct.getProductSoldout().equals("")) {
-			return selectProductListWithPageSearchByProductName(listPage, paramProduct);
+			return selectProductListWithPageDescSearchByProductName(listPage, paramProduct);
 		} else if (paramProduct.getCategoryId() == -1 && paramProduct.getProductName().equals("") && !paramProduct.getProductSoldout().equals("")) {
-			return selectProductListWithPageSearchByProductSoldout(listPage, paramProduct);
+			return selectProductListWithPageDescSearchByProductSoldout(listPage, paramProduct);
 		} else if (paramProduct.getCategoryId() != -1 && !paramProduct.getProductName().equals("") && paramProduct.getProductSoldout().equals("")) {
-			return selectProductListWithPageSearchByCategoryIdAndProductName(listPage, paramProduct);
+			return selectProductListWithPageDescSearchByCategoryIdAndProductName(listPage, paramProduct);
 		} else if (paramProduct.getCategoryId() != -1 && paramProduct.getProductName().equals("") && !paramProduct.getProductSoldout().equals("")) {
-			return selectProductListWithPageSearchByCategoryIdAndProductSoldout(listPage, paramProduct);
+			return selectProductListWithPageDescSearchByCategoryIdAndProductSoldout(listPage, paramProduct);
 		} else if (paramProduct.getCategoryId() == -1 && !paramProduct.getProductName().equals("") && !paramProduct.getProductSoldout().equals("")) {
-			return selectProductListWithPageSearchByProductNameAndProductSoldout(listPage, paramProduct);
+			return selectProductListWithPageDescSearchByProductNameAndProductSoldout(listPage, paramProduct);
 		} else if (paramProduct.getCategoryId() != -1 && !paramProduct.getProductName().equals("") && !paramProduct.getProductSoldout().equals("")) {
-			return selectProductListWithPageSearchByCategoryIdAndProductNameAndProductSoldout(listPage, paramProduct);
+			return selectProductListWithPageDescSearchByCategoryIdAndProductNameAndProductSoldout(listPage, paramProduct);
 		} else {
 			return null;
 		}
@@ -105,14 +105,14 @@ public class ProductDao {
 		}
 	}
 	
-	public ArrayList<ProductAndCategory> selectProductListWithPageSearchByCategoryId(ListPage listPage, Product paramProduct) throws Exception {
+	public ArrayList<ProductAndCategory> selectProductListWithPageDescSearchByCategoryId(ListPage listPage, Product paramProduct) throws Exception {
 		ArrayList<ProductAndCategory> returnList = new ArrayList<ProductAndCategory>();
 
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
 		
 		String sql = "SELECT product.product_id, category.category_name, product.product_name, product.product_price, product.product_soldout "
-					+"FROM product INNER JOIN category ON product.category_id=category.category_id WHERE product.category_id=? LIMIT ?, ?";
+					+"FROM product INNER JOIN category ON product.category_id=category.category_id WHERE product.category_id=? ORDER BY product.product_id DESC LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, paramProduct.getCategoryId());
 		stmt.setInt(2, listPage.getQueryIndex());
@@ -160,14 +160,14 @@ public class ProductDao {
 		return returnCount;
 	}
 	
-	public ArrayList<ProductAndCategory> selectProductListWithPageSearchByProductName(ListPage listPage, Product paramProduct) throws Exception {
+	public ArrayList<ProductAndCategory> selectProductListWithPageDescSearchByProductName(ListPage listPage, Product paramProduct) throws Exception {
 		ArrayList<ProductAndCategory> returnList = new ArrayList<ProductAndCategory>();
 
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
 		
 		String sql = "SELECT product.product_id, product.category_id, category.category_name, product.product_name, product.product_price, product.product_soldout "
-					+"FROM product INNER JOIN category ON product.category_id=category.category_id WHERE product.product_name LIKE ? LIMIT ?, ?";
+					+"FROM product INNER JOIN category ON product.category_id=category.category_id WHERE product.product_name LIKE ? ORDER BY product.product_id DESC LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, "%"+paramProduct.getProductName()+"%");
 		stmt.setInt(2, listPage.getQueryIndex());
@@ -215,14 +215,14 @@ public class ProductDao {
 		return returnCount;
 	}
 	
-	public ArrayList<ProductAndCategory> selectProductListWithPageSearchByProductSoldout(ListPage listPage, Product paramProduct) throws Exception {
+	public ArrayList<ProductAndCategory> selectProductListWithPageDescSearchByProductSoldout(ListPage listPage, Product paramProduct) throws Exception {
 		ArrayList<ProductAndCategory> returnList = new ArrayList<ProductAndCategory>();
 
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
 		
 		String sql = "SELECT product.product_id, product.category_id, category.category_name, product.product_name, product.product_price "
-					+"FROM product INNER JOIN category ON product.category_id=category.category_id WHERE product.product_soldout=? LIMIT ?, ?";
+					+"FROM product INNER JOIN category ON product.category_id=category.category_id WHERE product.product_soldout=? ORDER BY product.product_id DESC LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, paramProduct.getProductSoldout());
 		stmt.setInt(2, listPage.getQueryIndex());
@@ -270,7 +270,7 @@ public class ProductDao {
 		return returnCount;
 	}
 	
-	public ArrayList<ProductAndCategory> selectProductListWithPageSearchByCategoryIdAndProductName(ListPage listPage, Product paramProduct) throws Exception {
+	public ArrayList<ProductAndCategory> selectProductListWithPageDescSearchByCategoryIdAndProductName(ListPage listPage, Product paramProduct) throws Exception {
 		ArrayList<ProductAndCategory> returnList = new ArrayList<ProductAndCategory>();
 
 		DBUtil dbUtil = new DBUtil();
@@ -278,7 +278,7 @@ public class ProductDao {
 		
 		String sql = "SELECT product.product_id, category.category_name, product.product_price, product.product_name, product.product_soldout "
 					+"FROM product INNER JOIN category ON product.category_id=category.category_id "
-					+"WHERE product.category_id=? AND product.product_name LIKE ? LIMIT ?, ?";
+					+"WHERE product.category_id=? AND product.product_name LIKE ? ORDER BY product.product_id DESC LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, paramProduct.getCategoryId());
 		stmt.setString(2, "%"+paramProduct.getProductName()+"%");
@@ -328,7 +328,7 @@ public class ProductDao {
 		return returnCount;
 	}
 	
-	public ArrayList<ProductAndCategory> selectProductListWithPageSearchByCategoryIdAndProductSoldout(ListPage listPage, Product paramProduct) throws Exception {
+	public ArrayList<ProductAndCategory> selectProductListWithPageDescSearchByCategoryIdAndProductSoldout(ListPage listPage, Product paramProduct) throws Exception {
 		ArrayList<ProductAndCategory> returnList = new ArrayList<ProductAndCategory>();
 
 		DBUtil dbUtil = new DBUtil();
@@ -336,7 +336,7 @@ public class ProductDao {
 		
 		String sql = "SELECT product.product_id, category.category_name, product.product_name, product.product_price "
 					+"FROM product INNER JOIN category ON product.category_id=category.category_id "
-					+"WHERE product.category_id=? AND product.product_soldout=? LIMIT ?, ?";
+					+"WHERE product.category_id=? AND product.product_soldout=? ORDER BY product.product_id DESC LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, paramProduct.getCategoryId());
 		stmt.setString(2, paramProduct.getProductSoldout());
@@ -386,7 +386,7 @@ public class ProductDao {
 		return returnCount;
 	}
 	
-	public ArrayList<ProductAndCategory> selectProductListWithPageSearchByProductNameAndProductSoldout(ListPage listPage, Product paramProduct) throws Exception {
+	public ArrayList<ProductAndCategory> selectProductListWithPageDescSearchByProductNameAndProductSoldout(ListPage listPage, Product paramProduct) throws Exception {
 		ArrayList<ProductAndCategory> returnList = new ArrayList<ProductAndCategory>();
 
 		DBUtil dbUtil = new DBUtil();
@@ -394,7 +394,7 @@ public class ProductDao {
 		
 		String sql = "SELECT product.product_id, product.category_id, category.category_name, product.product_name, product.product_price "
 					+"FROM product INNER JOIN category ON product.category_id=category.category_id "
-					+"WHERE product.product_name LIKE ? AND product.product_soldout=? LIMIT ?, ?";
+					+"WHERE product.product_name LIKE ? AND product.product_soldout=? ORDER BY product.product_id DESC LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, "%"+paramProduct.getProductName()+"%");
 		stmt.setString(2, paramProduct.getProductSoldout());
@@ -444,7 +444,7 @@ public class ProductDao {
 		return returnCount;
 	}
 	
-	public ArrayList<ProductAndCategory> selectProductListWithPageSearchByCategoryIdAndProductNameAndProductSoldout(ListPage listPage, Product paramProduct) throws Exception {
+	public ArrayList<ProductAndCategory> selectProductListWithPageDescSearchByCategoryIdAndProductNameAndProductSoldout(ListPage listPage, Product paramProduct) throws Exception {
 		ArrayList<ProductAndCategory> returnList = new ArrayList<ProductAndCategory>();
 
 		DBUtil dbUtil = new DBUtil();
@@ -452,7 +452,7 @@ public class ProductDao {
 		
 		String sql = "SELECT product.product_id, category.category_name, product.product_name, product.product_price "
 					+"FROM product INNER JOIN category ON product.category_id=category.category_id "
-					+"WHERE product.category_id=? AND product.product_name LIKE ? AND product.product_soldout=? LIMIT ?, ?";
+					+"WHERE product.category_id=? AND product.product_name LIKE ? AND product.product_soldout=? ORDER BY product.product_id DESC LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, paramProduct.getCategoryId());
 		stmt.setString(2, "%"+paramProduct.getProductName()+"%");

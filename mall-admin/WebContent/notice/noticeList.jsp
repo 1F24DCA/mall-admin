@@ -24,38 +24,38 @@
 	</head>
 	
 	<%
-		final String THIS_PAGE = request.getContextPath()+"/notice/noticeList.jsp";
-		
-		request.setCharacterEncoding("UTF-8");
-		
-		ListPage listPage = new ListPage();
-		listPage.setCurrentPage(1);
-		listPage.setRowPerPage(10);
-		listPage.setNaviAmount(5);
-		if (request.getParameter("currentPage") != null) {
+			final String THIS_PAGE = request.getContextPath()+"/notice/noticeList.jsp";
+				
+				request.setCharacterEncoding("UTF-8");
+				
+				ListPage listPage = new ListPage();
+				listPage.setCurrentPage(1);
+				listPage.setRowPerPage(10);
+				listPage.setNaviAmount(5);
+				if (request.getParameter("currentPage") != null) {
 			listPage.setCurrentPage(Integer.parseInt(request.getParameter("currentPage")));
-		}
-	
-		String searchNoticeTitle = "";
-		if (request.getParameter("searchNoticeTitle") != null) {
+				}
+			
+				String searchNoticeTitle = "";
+				if (request.getParameter("searchNoticeTitle") != null) {
 			searchNoticeTitle = request.getParameter("searchNoticeTitle");
-		}
-		
-		System.out.println(searchNoticeTitle+"<-searchNoticeTitle");
-	
-		NoticeDao noticeDao = new NoticeDao();
-		ArrayList<Notice> list = null;
-		if (searchNoticeTitle.equals("")) {
-			list = noticeDao.selectNoticeListWithPage(listPage);
+				}
+				
+				System.out.println(searchNoticeTitle+"<-searchNoticeTitle");
+			
+				NoticeDao noticeDao = new NoticeDao();
+				ArrayList<Notice> list = null;
+				if (searchNoticeTitle.equals("")) {
+			list = noticeDao.selectNoticeListWithPageDesc(listPage);
 			listPage.setTotalRow(noticeDao.selectNoticeCount());
-		} else {
+				} else {
 			Notice paramNotice = new Notice();
 			paramNotice.setNoticeTitle(searchNoticeTitle);
 			
-			list = noticeDao.selectNoticeListWithPageSearchByNoticeTitle(listPage, paramNotice);
+			list = noticeDao.selectNoticeListWithPageDescSearchByNoticeTitle(listPage, paramNotice);
 			listPage.setTotalRow(noticeDao.selectNoticeCountSearchByNoticeTitle(paramNotice));
-		}
-	%>
+				}
+		%>
 	
 	<body>
 		<div class="container-xl">

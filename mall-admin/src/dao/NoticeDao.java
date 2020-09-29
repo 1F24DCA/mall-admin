@@ -7,13 +7,13 @@ import commons.*;
 import vo.*;
 
 public class NoticeDao {
-	public ArrayList<Notice> selectNoticeListWithPage(ListPage listPage) throws Exception {
+	public ArrayList<Notice> selectNoticeListWithPageDesc(ListPage listPage) throws Exception {
 		ArrayList<Notice> returnList = new ArrayList<Notice>();
 		
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
 		
-		String sql = "SELECT notice_id, notice_date, notice_title FROM notice LIMIT ?, ?";
+		String sql = "SELECT notice_id, notice_date, notice_title FROM notice ORDER BY notice_id DESC LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, listPage.getQueryIndex());
 		stmt.setInt(2, listPage.getRowPerPage());
@@ -54,13 +54,13 @@ public class NoticeDao {
 		return returnCount;
 	}
 	
-	public ArrayList<Notice> selectNoticeListWithPageSearchByNoticeTitle(ListPage listPage, Notice paramNotice) throws Exception {
+	public ArrayList<Notice> selectNoticeListWithPageDescSearchByNoticeTitle(ListPage listPage, Notice paramNotice) throws Exception {
 		ArrayList<Notice> returnList = new ArrayList<Notice>();
 		
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
 		
-		String sql = "SELECT notice_id, notice_date, notice_title FROM notice WHERE notice_title LIKE ? LIMIT ?, ?";
+		String sql = "SELECT notice_id, notice_date, notice_title FROM notice WHERE notice_title ORDER BY notice_id DESC LIKE ? LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, "%"+paramNotice.getNoticeTitle()+"%");
 		stmt.setInt(2, listPage.getQueryIndex());
