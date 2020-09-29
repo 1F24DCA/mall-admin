@@ -24,38 +24,38 @@
 	</head>
 	
 	<%
-			final String THIS_PAGE = request.getContextPath()+"/orders/ordersList.jsp";
-			
-				request.setCharacterEncoding("UTF-8");
-				System.out.println(request.getParameter("currentPage")+"<-request.getParameter(\"currentPage\")");
-				System.out.println(request.getParameter("searchOrdersState")+"<-request.getParameter(\"searchOrdersState\")");
-				
-				ListPage listPage = new ListPage();
-				listPage.setCurrentPage(1);
-				listPage.setRowPerPage(10);
-				listPage.setNaviAmount(5);
-				if (request.getParameter("currentPage") != null) {
+		final String THIS_PAGE = request.getContextPath()+"/orders/ordersList.jsp";
+	
+		request.setCharacterEncoding("UTF-8");
+		System.out.println(request.getParameter("currentPage")+"<-request.getParameter(\"currentPage\")");
+		System.out.println(request.getParameter("searchOrdersState")+"<-request.getParameter(\"searchOrdersState\")");
+		
+		ListPage listPage = new ListPage();
+		listPage.setCurrentPage(1);
+		listPage.setRowPerPage(10);
+		listPage.setNaviAmount(5);
+		if (request.getParameter("currentPage") != null) {
 			listPage.setCurrentPage(Integer.parseInt(request.getParameter("currentPage")));
-				}
+		}
 				
-				String searchOrdersState = "";
-				if (request.getParameter("searchOrdersState") != null) {
+		String searchOrdersState = "";
+		if (request.getParameter("searchOrdersState") != null) {
 			searchOrdersState = request.getParameter("searchOrdersState");
-				}
+		}
 				
-				OrdersDao ordersDao = new OrdersDao();
-				ArrayList<OrdersAndProduct> list = null;
-				if (searchOrdersState.equals("")) {
+		OrdersDao ordersDao = new OrdersDao();
+		ArrayList<OrdersAndProduct> list = null;
+		if (searchOrdersState.equals("")) {
 			list = ordersDao.selectOrdersListWithPageDesc(listPage);
 			listPage.setTotalRow(ordersDao.selectOrdersCount());
-				} else {
+		} else {
 			Orders paramOrders = new Orders();
 			paramOrders.setOrdersState(searchOrdersState);
 			
 			list = ordersDao.selectOrdersListWithPageDescSearchByOrdersState(listPage, paramOrders);
 			listPage.setTotalRow(ordersDao.selectOrdersCountSearchByOrdersState(paramOrders));
-				}
-		%>
+		}
+	%>
 	
 	<body>
 		<div class="container-xl">

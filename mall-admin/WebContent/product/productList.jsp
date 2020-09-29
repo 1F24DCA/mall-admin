@@ -24,46 +24,46 @@
 	</head>
 	
 	<%
-			final String THIS_PAGE = request.getContextPath()+"/product/productList.jsp";
-			
-				request.setCharacterEncoding("UTF-8");
-				System.out.println(request.getParameter("currentPage")+"<-request.getParameter(\"currentPage\")");
-				System.out.println(request.getParameter("searchCategoryId")+"<-request.getParameter(\"searchCategoryId\")");
-				System.out.println(request.getParameter("searchProductName")+"<-request.getParameter(\"searchProductName\")");
-				System.out.println(request.getParameter("searchProductSoldout")+"<-request.getParameter(\"searchProductSoldout\")");
-				
-				ListPage listPage = new ListPage();
-				listPage.setCurrentPage(1);
-				listPage.setRowPerPage(10);
-				listPage.setNaviAmount(5);
-				if (request.getParameter("currentPage") != null) {
+		final String THIS_PAGE = request.getContextPath()+"/product/productList.jsp";
+	
+		request.setCharacterEncoding("UTF-8");
+		System.out.println(request.getParameter("currentPage")+"<-request.getParameter(\"currentPage\")");
+		System.out.println(request.getParameter("searchCategoryId")+"<-request.getParameter(\"searchCategoryId\")");
+		System.out.println(request.getParameter("searchProductName")+"<-request.getParameter(\"searchProductName\")");
+		System.out.println(request.getParameter("searchProductSoldout")+"<-request.getParameter(\"searchProductSoldout\")");
+		
+		ListPage listPage = new ListPage();
+		listPage.setCurrentPage(1);
+		listPage.setRowPerPage(10);
+		listPage.setNaviAmount(5);
+		if (request.getParameter("currentPage") != null) {
 			listPage.setCurrentPage(Integer.parseInt(request.getParameter("currentPage")));
-				}
-				
-				int searchCategoryId = -1;
-				if (request.getParameter("searchCategoryId") != null) {
+		}
+		
+		int searchCategoryId = -1;
+		if (request.getParameter("searchCategoryId") != null) {
 			searchCategoryId = Integer.parseInt(request.getParameter("searchCategoryId"));
-				}
-				
-				String searchProductName = "";
-				if (request.getParameter("searchProductName") != null) {
+		}
+		
+		String searchProductName = "";
+		if (request.getParameter("searchProductName") != null) {
 			searchProductName = request.getParameter("searchProductName");
-				}
-				
-				String searchProductSoldout = "";
-				if (request.getParameter("searchProductSoldout") != null) {
+		}
+		
+		String searchProductSoldout = "";
+		if (request.getParameter("searchProductSoldout") != null) {
 			searchProductSoldout = request.getParameter("searchProductSoldout");
-				}
-				
-				Product paramProduct = new Product();
-				paramProduct.setCategoryId(searchCategoryId);
-				paramProduct.setProductName(searchProductName);
-				paramProduct.setProductSoldout(searchProductSoldout);
-			
-				ProductDao productDao = new ProductDao();
-				ArrayList<ProductAndCategory> list = productDao.selectProductListWithPageDescAndSearch(listPage, paramProduct);
-				listPage.setTotalRow(productDao.selectProductCountWithSearch(paramProduct));
-		%>
+		}
+		
+		Product paramProduct = new Product();
+		paramProduct.setCategoryId(searchCategoryId);
+		paramProduct.setProductName(searchProductName);
+		paramProduct.setProductSoldout(searchProductSoldout);
+	
+		ProductDao productDao = new ProductDao();
+		ArrayList<ProductAndCategory> list = productDao.selectProductListWithPageDescAndSearch(listPage, paramProduct);
+		listPage.setTotalRow(productDao.selectProductCountWithSearch(paramProduct));
+	%>
 	
 	<body>
 		<div class="container-xl">
