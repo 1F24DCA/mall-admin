@@ -28,7 +28,8 @@
 	
 		request.setCharacterEncoding("UTF-8");
 		System.out.println(request.getParameter("currentPage")+"<-request.getParameter(\"currentPage\")");
-		System.out.println(request.getParameter("searchMemberName")+"<-request.getParameter(\"searchMemberName\")");
+		System.out.println(request.getParameter("searchMemberEmailOrMemberNameEither")+"<-request.getParameter(\"searchMemberEmailOrMemberNameEither\")");
+		System.out.println(request.getParameter("searchDeletedBy")+"<-request.getParameter(\"searchDeletedBy\")");
 		
 		ListPage listPage = new ListPage();
 		listPage.setCurrentPage(1);
@@ -38,24 +39,24 @@
 			listPage.setCurrentPage(Integer.parseInt(request.getParameter("currentPage")));
 		}
 		
-		String searchMemberEmailOrName = "";
-		if (request.getParameter("searchMemberEmailOrName") != null) {
-			searchMemberEmailOrName = request.getParameter("searchMemberEmailOrName");
+		String searchMemberEmailOrMemberNameEither = "";
+		if (request.getParameter("searchMemberEmailOrMemberNameEither") != null) {
+			searchMemberEmailOrMemberNameEither = request.getParameter("searchMemberEmailOrMemberNameEither");
 		}
-	
+
+		String searchDeletedBy = "";
+		if (request.getParameter("searchDeletedBy") != null) {
+			searchDeletedBy = request.getParameter("searchDeletedBy");
+		}
+		
+		Member paramMember = new Member();
+		paramMember.setMemberEmail(searchMemberEmailOrMemberNameEither);
+		paramMember.setMemberName(searchMemberEmailOrMemberNameEither);
+		paramMember.setDeletedBy(searchDeletedBy);
+		
 		MemberDao memberDao = new MemberDao();
-		ArrayList<Member> list = null;
-		if (searchMemberEmailOrName.equals("")) {
-			list = memberDao.selectMemberListWithPage(listPage);
-			listPage.setTotalRow(memberDao.selectMemberCount());
-		} else {
-			Member paramMember = new Member();
-			paramMember.setMemberEmail(searchMemberEmailOrName);
-			paramMember.setMemberName(searchMemberEmailOrName);
-			
-			list = memberDao.selectMemberListWithPageSearchByMemberName(listPage, paramMember);
-			listPage.setTotalRow(memberDao.selectMemberCountSearchByMemberName(paramMember));
-		}
+		ArrayList<Member> list = memberDao.selectMemberListWithPageAndSearch(listPage, paramMember);
+		listPage.setTotalRow(memberDao.selectMemberCountWithSearch(paramMember));
 	%>
 	
 	<body>
@@ -77,9 +78,46 @@
 					<!-- 회원 검색 -->
 					<form method="post" action="<%=THIS_PAGE%>">
 						<div class="row">
-							<div class="col-9">
+							<div class="col-6">
 								<div class="form-group">
-									<input class="form-control" type="text" name="searchMemberEmailOrName" placeholder="이메일 혹은 이름으로 회원 검색" value="<%=searchMemberEmailOrName%>">
+									<input class="form-control" type="text" name="searchMemberEmailOrMemberNameEither" placeholder="이메일 혹은 이름으로 회원 검색" value="<%=searchMemberEmailOrMemberNameEither%>">
+								</div>
+							</div>
+							
+							<div class="col-3">
+								<div class="form-group">
+									<select class="form-control" name="searchDeletedBy">
+										<%
+											Member paramMemberSearchAllDeletedBy = new Member();
+											paramMemberSearchAllDeletedBy.setMemberEmail(searchMemberEmailOrMemberNameEither);
+											paramMemberSearchAllDeletedBy.setMemberName(searchMemberEmailOrMemberNameEither);
+											paramMemberSearchAllDeletedBy.setDeletedBy("");
+											
+											int countAllDeletedBy = memberDao.selectMemberCountWithSearch(paramMemberSearchAllDeletedBy);
+										%>
+										<option value="">전체 탈퇴여부 (<%=countAllDeletedBy %>)</option>
+										<%
+											ArrayList<String> deletedByList = memberDao.selectDeletedByListAll();
+											for (String deletedBy : deletedByList) {
+												Member paramMemberSearchDeletedBy = new Member();
+												paramMemberSearchDeletedBy.setMemberEmail(searchMemberEmailOrMemberNameEither);
+												paramMemberSearchDeletedBy.setMemberName(searchMemberEmailOrMemberNameEither);
+												paramMemberSearchDeletedBy.setDeletedBy(deletedBy);
+												
+												int count = memberDao.selectMemberCountWithSearch(paramMemberSearchDeletedBy);
+												
+												if (searchDeletedBy.equals(deletedBy)) {
+										%>
+													<option value="<%=deletedBy%>" selected="selected"><%=deletedBy %> (<%=count %>)</option>
+										<%
+												} else {
+										%>
+													<option value="<%=deletedBy%>"><%=deletedBy %> (<%=count %>)</option>
+										<%
+												}
+											}
+										%>
+									</select>
 								</div>
 							</div>
 							
@@ -159,16 +197,26 @@
 								String naviPrevLink = "";
 								String naviNextLink = "";
 								String naviLastLink = "";
-								if (searchMemberEmailOrName.equals("")) {
+								if (searchMemberEmailOrMemberNameEither.equals("") && searchDeletedBy.equals("")) {
 									naviFirstLink = THIS_PAGE;
 									naviPrevLink = THIS_PAGE+"?currentPage="+(listPage.getNaviStartPage()-1);
 									naviNextLink = THIS_PAGE+"?currentPage="+(listPage.getNaviEndPage()+1);
 									naviLastLink = THIS_PAGE+"?currentPage="+(listPage.getNaviLastPage());
-								} else {
-									naviFirstLink = THIS_PAGE+"?searchMemberEmailOrName="+searchMemberEmailOrName;
-									naviPrevLink = THIS_PAGE+"?currentPage="+(listPage.getNaviStartPage()-1)+"&searchMemberEmailOrName="+searchMemberEmailOrName;
-									naviNextLink = THIS_PAGE+"?currentPage="+(listPage.getNaviEndPage()+1)+"&searchMemberEmailOrName="+searchMemberEmailOrName;
-									naviLastLink = THIS_PAGE+"?currentPage="+(listPage.getNaviLastPage())+"&searchMemberEmailOrName="+searchMemberEmailOrName;
+								} else if (!searchMemberEmailOrMemberNameEither.equals("") && searchDeletedBy.equals("")) {
+									naviFirstLink = THIS_PAGE+"?searchMemberEmailOrMemberNameEither="+searchMemberEmailOrMemberNameEither;
+									naviPrevLink = THIS_PAGE+"?currentPage="+(listPage.getNaviStartPage()-1)+"&searchMemberEmailOrMemberNameEither="+searchMemberEmailOrMemberNameEither;
+									naviNextLink = THIS_PAGE+"?currentPage="+(listPage.getNaviEndPage()+1)+"&searchMemberEmailOrMemberNameEither="+searchMemberEmailOrMemberNameEither;
+									naviLastLink = THIS_PAGE+"?currentPage="+(listPage.getNaviLastPage())+"&searchMemberEmailOrMemberNameEither="+searchMemberEmailOrMemberNameEither;
+								} else if (searchMemberEmailOrMemberNameEither.equals("") && !searchDeletedBy.equals("")) {
+									naviFirstLink = THIS_PAGE+"?searchDeletedBy="+searchDeletedBy;
+									naviPrevLink = THIS_PAGE+"?currentPage="+(listPage.getNaviStartPage()-1)+"&searchDeletedBy="+searchDeletedBy;
+									naviNextLink = THIS_PAGE+"?currentPage="+(listPage.getNaviEndPage()+1)+"&searchDeletedBy="+searchDeletedBy;
+									naviLastLink = THIS_PAGE+"?currentPage="+(listPage.getNaviLastPage())+"&searchDeletedBy="+searchDeletedBy;
+								} else if (!searchMemberEmailOrMemberNameEither.equals("") && !searchDeletedBy.equals("")) {
+									naviFirstLink = THIS_PAGE+"?searchMemberEmailOrMemberNameEither="+searchMemberEmailOrMemberNameEither+"&searchDeletedBy="+searchDeletedBy;
+									naviPrevLink = THIS_PAGE+"?currentPage="+(listPage.getNaviStartPage()-1)+"&searchMemberEmailOrMemberNameEither="+searchMemberEmailOrMemberNameEither+"&searchDeletedBy="+searchDeletedBy;
+									naviNextLink = THIS_PAGE+"?currentPage="+(listPage.getNaviEndPage()+1)+"&searchMemberEmailOrMemberNameEither="+searchMemberEmailOrMemberNameEither+"&searchDeletedBy="+searchDeletedBy;
+									naviLastLink = THIS_PAGE+"?currentPage="+(listPage.getNaviLastPage())+"&searchMemberEmailOrMemberNameEither="+searchMemberEmailOrMemberNameEither+"&searchDeletedBy="+searchDeletedBy;
 								}
 							%>
 							
@@ -190,10 +238,14 @@
 										}
 				
 										String naviPageLink = "";
-										if (searchMemberEmailOrName.equals("")) {
+										if (searchMemberEmailOrMemberNameEither.equals("") && searchDeletedBy.equals("")) {
 											naviPageLink = THIS_PAGE+"?currentPage="+naviPage;
-										} else {
-											naviPageLink = THIS_PAGE+"?currentPage="+naviPage+"&searchMemberEmailOrName="+searchMemberEmailOrName;
+										} else if (!searchMemberEmailOrMemberNameEither.equals("") && searchDeletedBy.equals("")) {
+											naviPageLink = THIS_PAGE+"?currentPage="+naviPage+"&searchMemberEmailOrMemberNameEither="+searchMemberEmailOrMemberNameEither;
+										} else if (searchMemberEmailOrMemberNameEither.equals("") && !searchDeletedBy.equals("")) {
+											naviPageLink = THIS_PAGE+"?currentPage="+naviPage+"&searchDeletedBy="+searchDeletedBy;
+										} else if (!searchMemberEmailOrMemberNameEither.equals("") && !searchDeletedBy.equals("")) {
+											naviPageLink = THIS_PAGE+"?currentPage="+naviPage+"&searchMemberEmailOrMemberNameEither="+searchMemberEmailOrMemberNameEither+"&searchDeletedBy="+searchDeletedBy;
 										}
 								%>
 										<li class="<%=naviPageClasses%>">
