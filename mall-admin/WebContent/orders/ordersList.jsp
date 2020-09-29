@@ -37,24 +37,32 @@
 		if (request.getParameter("currentPage") != null) {
 			listPage.setCurrentPage(Integer.parseInt(request.getParameter("currentPage")));
 		}
-				
+		
+		String searchProductName = "";
+		if (request.getParameter("searchProductName") != null) {
+			searchProductName = request.getParameter("searchProductName");
+		}
+		
+		String searchMemberEmail = "";
+		if (request.getParameter("searchMemberEmail") != null) {
+			searchMemberEmail = request.getParameter("searchMemberEmail");
+		}
+		
 		String searchOrdersState = "";
 		if (request.getParameter("searchOrdersState") != null) {
 			searchOrdersState = request.getParameter("searchOrdersState");
 		}
-				
+		
+		OrdersAndProduct paramOAP = new OrdersAndProduct();
+		paramOAP.setOrders(new Orders());
+		paramOAP.setProduct(new Product());
+		paramOAP.getProduct().setProductName(searchProductName);
+		paramOAP.getOrders().setMemberEmail(searchMemberEmail);
+		paramOAP.getOrders().setOrdersState(searchOrdersState);
+		
 		OrdersDao ordersDao = new OrdersDao();
-		ArrayList<OrdersAndProduct> list = null;
-		if (searchOrdersState.equals("")) {
-			list = ordersDao.selectOrdersListWithPageDesc(listPage);
-			listPage.setTotalRow(ordersDao.selectOrdersCount());
-		} else {
-			Orders paramOrders = new Orders();
-			paramOrders.setOrdersState(searchOrdersState);
-			
-			list = ordersDao.selectOrdersListWithPageDescSearchByOrdersState(listPage, paramOrders);
-			listPage.setTotalRow(ordersDao.selectOrdersCountSearchByOrdersState(paramOrders));
-		}
+		ArrayList<OrdersAndProduct> list = ordersDao.selectOrdersListWithPageDescAndSearch(listPage, paramOAP);
+		listPage.setTotalRow(ordersDao.selectOrdersCountWithSearch(paramOAP));
 	%>
 	
 	<body>
@@ -76,20 +84,46 @@
 					<!-- 주문 상태 검색 -->
 					<form method="post" action="<%=THIS_PAGE%>">
 						<div class="row">
-							<div class="col-9">
+							<!-- 상품 이름으로 주문 검색 -->
+							<div class="col-3">
+								<div class="form-group">
+									<input class="form-control" type="text" name="searchProductName" placeholder="상품 이름으로 주문 검색" value="<%=searchProductName%>">
+								</div>
+							</div>
+							
+							<!-- 이메일로 주문 검색 -->
+							<div class="col-3">
+								<div class="form-group">
+									<input class="form-control" type="text" name="searchMemberEmail" placeholder="이메일로 주문 검색" value="<%=searchMemberEmail%>">
+								</div>
+							</div>
+							
+							<!-- 주문 상태로 주문 검색 -->
+							<div class="col-3">
 								<div class="form-group">
 									<select class="form-control" name="searchOrdersState">
 										<%
-											int countAll = ordersDao.selectOrdersCount();
+											OrdersAndProduct paramOAPSearchAllOrdersState = new OrdersAndProduct();
+											paramOAPSearchAllOrdersState.setOrders(new Orders());
+											paramOAPSearchAllOrdersState.setProduct(new Product());
+											paramOAPSearchAllOrdersState.getProduct().setProductName(searchProductName);
+											paramOAPSearchAllOrdersState.getOrders().setMemberEmail(searchMemberEmail);
+											paramOAPSearchAllOrdersState.getOrders().setOrdersState("");
+											
+											int countAllOrdersState = ordersDao.selectOrdersCountWithSearch(paramOAPSearchAllOrdersState);
 										%>
-										<option value="">전체 주문 목록 (<%=countAll %>)</option>
+										<option value="">전체 주문 목록 (<%=countAllOrdersState %>)</option>
 										<%
 											ArrayList<String> ordersStateList = ordersDao.selectOrdersStateListExist();
 											for (String ordersState : ordersStateList) {
-												Orders paramOrdersSearchOrdersState = new Orders();
-												paramOrdersSearchOrdersState.setOrdersState(ordersState);
+												OrdersAndProduct paramOAPSearchOrdersState = new OrdersAndProduct();
+												paramOAPSearchOrdersState.setOrders(new Orders());
+												paramOAPSearchOrdersState.setProduct(new Product());
+												paramOAPSearchOrdersState.getProduct().setProductName(searchProductName);
+												paramOAPSearchOrdersState.getOrders().setMemberEmail(searchMemberEmail);
+												paramOAPSearchOrdersState.getOrders().setOrdersState(ordersState);
 												
-												int count = ordersDao.selectOrdersCountSearchByOrdersState(paramOrdersSearchOrdersState);
+												int count = ordersDao.selectOrdersCountWithSearch(paramOAPSearchOrdersState);
 												
 												// 검색한 카테고리와 일치하면 해당 항목을 선택함
 												if (searchOrdersState.equals(ordersState)) {
@@ -182,16 +216,46 @@
 								String naviPrevLink = "";
 								String naviNextLink = "";
 								String naviLastLink = "";
-								if (searchOrdersState.equals("")) {
+								if (searchProductName.equals("") && searchMemberEmail.equals("") && searchOrdersState.equals("")) {
 									naviFirstLink = THIS_PAGE;
 									naviPrevLink = THIS_PAGE+"?currentPage="+(listPage.getNaviStartPage()-1);
 									naviNextLink = THIS_PAGE+"?currentPage="+(listPage.getNaviEndPage()+1);
 									naviLastLink = THIS_PAGE+"?currentPage="+(listPage.getNaviLastPage());
-								} else {
+								} else if (!searchProductName.equals("") && searchMemberEmail.equals("") && searchOrdersState.equals("")) {
+									naviFirstLink = THIS_PAGE+"?searchProductName="+searchProductName;
+									naviPrevLink = THIS_PAGE+"?currentPage="+(listPage.getNaviStartPage()-1)+"&searchProductName="+searchProductName;
+									naviNextLink = THIS_PAGE+"?currentPage="+(listPage.getNaviEndPage()+1)+"&searchProductName="+searchProductName;
+									naviLastLink = THIS_PAGE+"?currentPage="+(listPage.getNaviLastPage())+"&searchProductName="+searchProductName;
+								} else if (searchProductName.equals("") && !searchMemberEmail.equals("") && searchOrdersState.equals("")) {
+									naviFirstLink = THIS_PAGE+"?searchMemberEmail="+searchMemberEmail;
+									naviPrevLink = THIS_PAGE+"?currentPage="+(listPage.getNaviStartPage()-1)+"&searchMemberEmail="+searchMemberEmail;
+									naviNextLink = THIS_PAGE+"?currentPage="+(listPage.getNaviEndPage()+1)+"&searchMemberEmail="+searchMemberEmail;
+									naviLastLink = THIS_PAGE+"?currentPage="+(listPage.getNaviLastPage())+"&searchMemberEmail="+searchMemberEmail;
+								} else if (searchProductName.equals("") && searchMemberEmail.equals("") && !searchOrdersState.equals("")) {
 									naviFirstLink = THIS_PAGE+"?searchOrdersState="+searchOrdersState;
 									naviPrevLink = THIS_PAGE+"?currentPage="+(listPage.getNaviStartPage()-1)+"&searchOrdersState="+searchOrdersState;
 									naviNextLink = THIS_PAGE+"?currentPage="+(listPage.getNaviEndPage()+1)+"&searchOrdersState="+searchOrdersState;
 									naviLastLink = THIS_PAGE+"?currentPage="+(listPage.getNaviLastPage())+"&searchOrdersState="+searchOrdersState;
+								} else if (!searchProductName.equals("") && !searchMemberEmail.equals("") && searchOrdersState.equals("")) {
+									naviFirstLink = THIS_PAGE+"?searchProductName="+searchProductName+"&searchMemberEmail="+searchMemberEmail;
+									naviPrevLink = THIS_PAGE+"?currentPage="+(listPage.getNaviStartPage()-1)+"&searchProductName="+searchProductName+"&searchMemberEmail="+searchMemberEmail;
+									naviNextLink = THIS_PAGE+"?currentPage="+(listPage.getNaviEndPage()+1)+"&searchProductName="+searchProductName+"&searchMemberEmail="+searchMemberEmail;
+									naviLastLink = THIS_PAGE+"?currentPage="+(listPage.getNaviLastPage())+"&searchProductName="+searchProductName+"&searchMemberEmail="+searchMemberEmail;
+								} else if (!searchProductName.equals("") && searchMemberEmail.equals("") && !searchOrdersState.equals("")) {
+									naviFirstLink = THIS_PAGE+"?searchProductName="+searchProductName+"&searchOrdersState="+searchOrdersState;
+									naviPrevLink = THIS_PAGE+"?currentPage="+(listPage.getNaviStartPage()-1)+"&searchProductName="+searchProductName+"&searchOrdersState="+searchOrdersState;
+									naviNextLink = THIS_PAGE+"?currentPage="+(listPage.getNaviEndPage()+1)+"&searchProductName="+searchProductName+"&searchOrdersState="+searchOrdersState;
+									naviLastLink = THIS_PAGE+"?currentPage="+(listPage.getNaviLastPage())+"&searchProductName="+searchProductName+"&searchOrdersState="+searchOrdersState;
+								} else if (searchProductName.equals("") && !searchMemberEmail.equals("") && !searchOrdersState.equals("")) {
+									naviFirstLink = THIS_PAGE+"?searchMemberEmail="+searchMemberEmail+"&searchOrdersState="+searchOrdersState;
+									naviPrevLink = THIS_PAGE+"?currentPage="+(listPage.getNaviStartPage()-1)+"&searchMemberEmail="+searchMemberEmail+"&searchOrdersState="+searchOrdersState;
+									naviNextLink = THIS_PAGE+"?currentPage="+(listPage.getNaviEndPage()+1)+"&searchMemberEmail="+searchMemberEmail+"&searchOrdersState="+searchOrdersState;
+									naviLastLink = THIS_PAGE+"?currentPage="+(listPage.getNaviLastPage())+"&searchMemberEmail="+searchMemberEmail+"&searchOrdersState="+searchOrdersState;
+								} else if (!searchProductName.equals("") && !searchMemberEmail.equals("") && !searchOrdersState.equals("")) {
+									naviFirstLink = THIS_PAGE+"?searchProductName="+searchProductName+"&searchMemberEmail="+searchMemberEmail+"&searchOrdersState="+searchOrdersState;
+									naviPrevLink = THIS_PAGE+"?currentPage="+(listPage.getNaviStartPage()-1)+"&searchProductName="+searchProductName+"&searchMemberEmail="+searchMemberEmail+"&searchOrdersState="+searchOrdersState;
+									naviNextLink = THIS_PAGE+"?currentPage="+(listPage.getNaviEndPage()+1)+"&searchProductName="+searchProductName+"&searchMemberEmail="+searchMemberEmail+"&searchOrdersState="+searchOrdersState;
+									naviLastLink = THIS_PAGE+"?currentPage="+(listPage.getNaviLastPage())+"&searchProductName="+searchProductName+"&searchMemberEmail="+searchMemberEmail+"&searchOrdersState="+searchOrdersState;
 								}
 							%>
 							
@@ -213,10 +277,22 @@
 										}
 				
 										String naviPageLink = "";
-										if (searchOrdersState.equals("")) {
+										if (searchProductName.equals("") && searchMemberEmail.equals("") && searchOrdersState.equals("")) {
 											naviPageLink = THIS_PAGE+"?currentPage="+naviPage;
-										} else {
+										} else if (!searchProductName.equals("") && searchMemberEmail.equals("") && searchOrdersState.equals("")) {
+											naviPageLink = THIS_PAGE+"?currentPage="+naviPage+"&searchProductName="+searchProductName;
+										} else if (searchProductName.equals("") && !searchMemberEmail.equals("") && searchOrdersState.equals("")) {
+											naviPageLink = THIS_PAGE+"?currentPage="+naviPage+"&searchMemberEmail="+searchMemberEmail;
+										} else if (searchProductName.equals("") && searchMemberEmail.equals("") && !searchOrdersState.equals("")) {
 											naviPageLink = THIS_PAGE+"?currentPage="+naviPage+"&searchOrdersState="+searchOrdersState;
+										} else if (!searchProductName.equals("") && !searchMemberEmail.equals("") && searchOrdersState.equals("")) {
+											naviPageLink = THIS_PAGE+"?currentPage="+naviPage+"&searchProductName="+searchProductName+"&searchMemberEmail="+searchMemberEmail;
+										} else if (!searchProductName.equals("") && searchMemberEmail.equals("") && !searchOrdersState.equals("")) {
+											naviPageLink = THIS_PAGE+"?currentPage="+naviPage+"&searchProductName="+searchProductName+"&searchOrdersState="+searchOrdersState;
+										} else if (searchProductName.equals("") && !searchMemberEmail.equals("") && !searchOrdersState.equals("")) {
+											naviPageLink = THIS_PAGE+"?currentPage="+naviPage+"&searchMemberEmail="+searchMemberEmail+"&searchOrdersState="+searchOrdersState;
+										} else if (!searchProductName.equals("") && !searchMemberEmail.equals("") && !searchOrdersState.equals("")) {
+											naviPageLink = THIS_PAGE+"?currentPage="+naviPage+"&searchProductName="+searchProductName+"&searchMemberEmail="+searchMemberEmail+"&searchOrdersState="+searchOrdersState;
 										}
 								%>
 										<li class="<%=naviPageClasses%>">
