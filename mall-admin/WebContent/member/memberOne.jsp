@@ -51,22 +51,22 @@
 					<!-- 회원 출력 -->
 					<table class="table table-striped">
 						<tr>
-							<th>이메일</th>
+							<th class="w-25 text-right">이메일</th>
 							<td><%=member.getMemberEmail() %></td>
 						</tr>
 						
 						<tr>
-							<th>이름</th>
+							<th class="w-25 text-right">이름</th>
 							<td><%=member.getMemberName() %></td>
 						</tr>
 						
 						<tr>
-							<th>가입한 날짜</th>
+							<th class="w-25 text-right">가입한 날짜</th>
 							<td><%=member.getMemberDate() %></td>
 						</tr>
 						
 						<tr>
-							<th>탈퇴여부</th>
+							<th class="w-25 text-right">탈퇴여부</th>
 							<td><%=member.getDeletedBy() %></td>
 						</tr>
 					</table>

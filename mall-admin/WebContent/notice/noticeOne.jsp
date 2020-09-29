@@ -51,22 +51,22 @@
 				<!-- 공지 출력 -->
 				<table class="table table-striped">
 					<tr>
-						<th>공지 번호</th>
+						<th class="w-25 text-right">공지 번호</th>
 						<td><%=notice.getNoticeId() %></td>
 					</tr>
 					
 					<tr>
-						<th>공지 제목</th>
+						<th class="w-25 text-right">공지 제목</th>
 						<td><%=notice.getNoticeTitle() %></td>
 					</tr>
 					
 					<tr>
-						<th>공지 내용</th>
+						<th class="w-25 text-right">공지 내용</th>
 						<td><%=notice.getNoticeContent() %></td>
 					</tr>
 					
 					<tr>
-						<th>공지한 날짜</th>
+						<th class="w-25 text-right">공지한 날짜</th>
 						<td><%=notice.getNoticeDate() %></td>
 					</tr>
 				</table>

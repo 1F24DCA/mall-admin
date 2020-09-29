@@ -63,32 +63,32 @@
 					<!-- 상품 출력 -->
 					<table class="table table-striped">
 						<tr>
-							<th>상품 번호</th>
+							<th class="w-25 text-right">상품 번호</th>
 							<td><%=pac.getProduct().getProductId() %></td>
 						</tr>
 						
 						<tr>
-							<th>카테고리</th>
+							<th class="w-25 text-right">카테고리</th>
 							<td><%=pac.getCategory().getCategoryName() %></td>
 						</tr>
 						
 						<tr>
-							<th>상품 이름</th>
+							<th class="w-25 text-right">상품 이름</th>
 							<td><%=pac.getProduct().getProductName() %></td>
 						</tr>
 						
 						<tr>
-							<th>가격</th>
+							<th class="w-25 text-right">가격</th>
 							<td><%=pac.getProduct().getProductPrice() %></td>
 						</tr>
 						
 						<tr>
-							<th>설명</th>
+							<th class="w-25 text-right">설명</th>
 							<td><%=pac.getProduct().getProductContent() %></td>
 						</tr>
 						
 						<tr>
-							<th>판매여부</th>
+							<th class="w-25 text-right">판매여부</th>
 							<%
 								String soldoutText = "판매중";
 								if (pac.getProduct().getProductSoldout().equals("Y")) {
@@ -99,7 +99,7 @@
 						</tr>
 						
 						<tr>
-							<th>이미지</th>
+							<th class="w-25 text-right">이미지</th>
 							<td><img class="border" src="/mall-admin/image/<%=pac.getProduct().getProductPic()%>"></td>
 						</tr>
 					</table>

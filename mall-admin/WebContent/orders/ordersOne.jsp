@@ -51,42 +51,42 @@
 					<!-- 주문 내역 출력 -->
 					<table class="table table-striped">
 						<tr>
-							<th>주문 번호</th>
+							<th class="w-25 text-right">주문 번호</th>
 							<td><%=oap.getOrders().getOrdersId() %></td>
 						</tr>
 						
 						<tr>
-							<th>주문한 날짜</th>
+							<th class="w-25 text-right">주문한 날짜</th>
 							<td><%=oap.getOrders().getOrdersDate() %></td>
 						</tr>
 						
 						<tr>
-							<th>상품 이름</th>
+							<th class="w-25 text-right">상품 이름</th>
 							<td><%=oap.getProduct().getProductName() %></td>
 						</tr>
 						
 						<tr>
-							<th>주문한 갯수</th>
+							<th class="w-25 text-right">주문한 갯수</th>
 							<td><%=oap.getOrders().getOrdersAmount() %></td>
 						</tr>
 						
 						<tr>
-							<th>결제한 금액</th>
+							<th class="w-25 text-right">결제한 금액</th>
 							<td><%=oap.getOrders().getOrdersPrice() %></td>
 						</tr>
 						
 						<tr>
-							<th>주문자 이메일</th>
+							<th class="w-25 text-right">주문자 이메일</th>
 							<td><%=oap.getOrders().getMemberEmail() %></td>
 						</tr>
 						
 						<tr>
-							<th>배송지</th>
+							<th class="w-25 text-right">배송지</th>
 							<td><%=oap.getOrders().getOrdersAddr() %></td>
 						</tr>
 						
 						<tr>
-							<th>상태</th>
+							<th class="w-25 text-right">상태</th>
 							<td><%=oap.getOrders().getOrdersState() %></td>
 						</tr>
 					</table>

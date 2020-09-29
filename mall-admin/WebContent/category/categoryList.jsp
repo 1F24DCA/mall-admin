@@ -94,8 +94,8 @@
 					<table class="table table-striped">
 						<thead>
 							<tr>
-								<th>카테고리 번호</th>
-								<th>카테고리 이름</th>
+								<th>번호</th>
+								<th class="w-75">카테고리 이름</th>
 								<th>&nbsp;</th>
 								<th>&nbsp;</th>
 							</tr>
