@@ -43,7 +43,7 @@
 				
 				<!-- 본문 -->
 				<div class="card-body">
-					<form method="post" action="<%=request.getContextPath()%>/product/addProductAction.jsp">
+					<form method="post" action="<%=request.getContextPath()%>/product/addProductAction.jsp" enctype="multipart/form-data">
 						<div class="form-group">
 							<label>카테고리:</label>
 							<select class="form-control" name="categoryId">
@@ -89,6 +89,11 @@
 									<input type="radio" class="form-check-input" name="productSoldout" value="Y">품절
 								</label>
 							</div>
+						</div>
+						
+						<div class="form-group">
+							<label>이미지:</label>
+							<input class="rounded-lg border w-100 p-2" type="file" name="productPic">
 						</div>
 						
 						<hr>

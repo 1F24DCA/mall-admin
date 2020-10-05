@@ -568,13 +568,14 @@ public class ProductDao {
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
 		
-		String sql = "INSERT INTO product(category_id, product_name, product_price, product_content, product_soldout) VALUES(?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO product(category_id, product_name, product_price, product_content, product_soldout, product_pic) VALUES(?, ?, ?, ?, ?, ?)";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, paramProduct.getCategoryId());
 		stmt.setString(2, paramProduct.getProductName());
 		stmt.setInt(3, paramProduct.getProductPrice());
 		stmt.setString(4, paramProduct.getProductContent());
 		stmt.setString(5, paramProduct.getProductSoldout());
+		stmt.setString(6, paramProduct.getProductPic());
 		System.out.println(stmt+"<-stmt");
 		
 		stmt.executeUpdate();

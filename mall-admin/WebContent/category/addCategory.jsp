@@ -34,10 +34,15 @@
 				
 				<!-- 본문 -->
 				<div class="card-body">
-					<form method="post" action="<%=request.getContextPath()%>/category/addCategoryAction.jsp">
+					<form method="post" action="<%=request.getContextPath()%>/category/addCategoryAction.jsp" enctype="multipart/form-data">
 						<div class="form-group">
 							<label>카테고리 이름:</label>
 							<input class="form-control" type="text" name="categoryName">
+						</div>
+						
+						<div class="form-group">
+							<label>이미지:</label>
+							<input class="rounded-lg border w-100 p-2" type="file" name="categoryPic">
 						</div>
 						
 						<hr>

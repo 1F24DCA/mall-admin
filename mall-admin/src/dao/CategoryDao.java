@@ -182,9 +182,10 @@ public class CategoryDao {
 		DBUtil dbUtil = new DBUtil();
 		Connection conn = dbUtil.getConnection();
 		
-		String sql = "INSERT INTO category(category_name) VALUES(?)";
+		String sql = "INSERT INTO category(category_name, category_pic) VALUES(?, ?)";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, paramCategory.getCategoryName());
+		stmt.setString(2, paramCategory.getCategoryPic());
 		System.out.println(stmt+"<-stmt");
 		
 		stmt.executeUpdate();
