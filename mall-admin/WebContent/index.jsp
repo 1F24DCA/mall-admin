@@ -20,21 +20,6 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 	</head>
 	
-	<%
-		int currentUserCount = 0;
-		if (application.getAttribute("currentUserCount") != null) {
-			currentUserCount = (Integer) application.getAttribute("currentUserCount");
-		}
-		
-		int todayUserCount = 0;
-		if (application.getAttribute("todayUserCount") != null) {
-			todayUserCount = (Integer) application.getAttribute("todayUserCount");
-		}
-		
-		TotalUserCountDao totalUserCountDao = new TotalUserCountDao();
-		int totalUserCount = totalUserCountDao.selectUserCount();
-	%>
-	
 	<body>
 		<div class="container-xl">
 			<!-- 메뉴 -->
@@ -62,30 +47,6 @@
 					<p>
 						mall 프로젝트에서 사용하는 DB를 관리합니다<br>
 						상품 카테고리 관리, 상품 관리, 주문 조회 및 주문 상태 변경, 공지 작성, 회원 조회 및 회원 강퇴 등이 가능합니다
-					</p>
-					
-					<hr>
-					
-					<p>
-						<h4>유저 통계</h4>
-					</p>
-					<p>
-						<table class="table">
-							<tr>
-								<th class="w-25">현재 접속자 수</th>
-								<td><%=currentUserCount %></td>
-							</tr>
-							
-							<tr>
-								<th>오늘 방문자 수</th>
-								<td><%=todayUserCount %></td>
-							</tr>
-							
-							<tr>
-								<th>전체 방문자 수</th>
-								<td><%=totalUserCount %></td>
-							</tr>
-						</table>
 					</p>
 					
 					<hr>
