@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
+<%@ page import="dao.*" %>
+
 <%
 	System.out.println(session.getAttribute("loginAdminEmail")+"<-session.getAttribute(\"loginAdminEmail\")");
 	if (session.getAttribute("loginAdminEmail") == null) {
@@ -17,6 +19,21 @@
 		<!-- 부트스트랩 사용 -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 	</head>
+	
+	<%
+		int currentUserCount = 0;
+		if (application.getAttribute("currentUserCount") != null) {
+			currentUserCount = (Integer) application.getAttribute("currentUserCount");
+		}
+		
+		int todayUserCount = 0;
+		if (application.getAttribute("todayUserCount") != null) {
+			todayUserCount = (Integer) application.getAttribute("todayUserCount");
+		}
+		
+		TotalUserCountDao totalUserCountDao = new TotalUserCountDao();
+		int totalUserCount = totalUserCountDao.selectUserCount();
+	%>
 	
 	<body>
 		<div class="container-xl">
@@ -50,12 +67,36 @@
 					<hr>
 					
 					<p>
+						<h4>유저 통계</h4>
+					</p>
+					<p>
+						<table class="table">
+							<tr>
+								<th class="w-25">현재 접속자 수</th>
+								<td><%=currentUserCount %></td>
+							</tr>
+							
+							<tr>
+								<th>오늘 방문자 수</th>
+								<td><%=todayUserCount %></td>
+							</tr>
+							
+							<tr>
+								<th>전체 방문자 수</th>
+								<td><%=totalUserCount %></td>
+							</tr>
+						</table>
+					</p>
+					
+					<hr>
+					
+					<p>
 						<h4>개발 환경</h4>
 					</p>
 					<p>
 						<table class="table">
 							<tr>
-								<th>OS</th>
+								<th class="w-25">OS</th>
 								<td>Windows 10 Home 버전 2004 (빌드 19041.508)</td>
 							</tr>
 							
@@ -100,7 +141,7 @@
 					<p>
 						<table class="table">
 							<tr>
-								<th>OS</th>
+								<th class="w-25">OS</th>
 								<td>Ubuntu 20.04.1 LTS 버전 5.4.0-1024-aws</td>
 							</tr>
 							
