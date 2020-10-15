@@ -16,6 +16,31 @@
 		
 		<!-- 부트스트랩 사용 -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script>
+			$(document).ready(function() {
+				console.log("document ready");
+				
+				$("#addCategorySubmit").click(function() {
+					console.log("started add category");
+					
+					if ($("#addCategoryName").val() == "") {
+						alert("카테고리 이름을 입력해주세요!");
+						
+						$("#addCategoryName").focus();
+						return;
+					} else if ($("#addCategoryPic").val() == "") {
+						alert("카테고리 이미지를 선택해주세요!");
+						
+						$("#addCategoryPic").focus();
+						return;
+					}
+					
+					$("#addCategoryForm").submit();
+				});
+			});
+		</script>
 	</head>
 	
 	<body>
@@ -34,21 +59,21 @@
 				
 				<!-- 본문 -->
 				<div class="card-body">
-					<form method="post" action="<%=request.getContextPath()%>/category/addCategoryAction.jsp" enctype="multipart/form-data">
+					<form method="post" action="<%=request.getContextPath()%>/category/addCategoryAction.jsp" enctype="multipart/form-data" id="addCategoryForm">
 						<div class="form-group">
 							<label>카테고리 이름:</label>
-							<input class="form-control" type="text" name="categoryName">
+							<input class="form-control" type="text" name="categoryName" id="addCategoryName">
 						</div>
 						
 						<div class="form-group">
 							<label>이미지:</label>
-							<input class="rounded-lg border w-100 p-2" type="file" name="categoryPic">
+							<input class="rounded-lg border w-100 p-2" type="file" name="categoryPic" id="addCategoryPic">
 						</div>
 						
 						<hr>
 						
 						<div class="form-group">
-							<button class="btn btn-outline-primary btn-block" type="submit">카테고리 추가</button>
+							<button class="btn btn-outline-primary btn-block" type="button" id="addCategorySubmit">카테고리 추가</button>
 						</div>
 					</form>
 				</div>

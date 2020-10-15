@@ -16,6 +16,31 @@
 		
 		<!-- 부트스트랩 사용 -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script>
+			$(document).ready(function() {
+				console.log("document ready");
+				
+				$("#addNoticeSubmit").click(function() {
+					console.log("started add notice");
+					
+					if ($("#addNoticeTitle").val() == "") {
+						alert("공지 제목을 입력해주세요!");
+						
+						$("#addNoticeTitle").focus();
+						return;
+					} else if ($("#addNoticeContent").val() == "") {
+						alert("공지 내용을 입력해주세요!");
+						
+						$("#addNoticeContent").focus();
+						return;
+					}
+					
+					$("#addNoticeForm").submit();
+				});
+			});
+		</script>
 	</head>
 	
 	<body>
@@ -34,21 +59,21 @@
 				
 				<!-- 본문 -->
 				<div class="card-body">
-					<form method="post" action="<%=request.getContextPath()%>/notice/addNoticeAction.jsp">
+					<form method="post" action="<%=request.getContextPath()%>/notice/addNoticeAction.jsp" id="addNoticeForm">
 						<div class="form-group">
 							<label>공지 제목:</label>
-							<input class="form-control" type="text" name="noticeTitle">
+							<input class="form-control" type="text" name="noticeTitle" id="addNoticeTitle">
 						</div>
 						
 						<div class="form-group">
 							<label>공지 내용:</label>
-							<textarea class="form-control" rows="5" cols="80" name="noticeContent"></textarea>
+							<textarea class="form-control" rows="5" cols="80" name="noticeContent" id="addNoticeContent"></textarea>
 						</div>
 						
 						<hr>
 						
 						<div class="form-group">
-							<button class="btn btn-outline-primary btn-block" type="submit">공지 작성</button>
+							<button class="btn btn-outline-primary btn-block" type="button" id="addNoticeSubmit">공지 작성</button>
 						</div>
 					</form>
 				</div>

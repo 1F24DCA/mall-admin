@@ -16,6 +16,31 @@
 		
 		<!-- 부트스트랩 사용 -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script>
+			$(document).ready(function() {
+				console.log("document ready");
+				
+				$("#loginSubmit").click(function() {
+					console.log("started login");
+					
+					if ($("#loginEmail").val() == "") {
+						alert("이메일을 입력해주세요!");
+						
+						$("#loginEmail").focus();
+						return;
+					} else if ($("#loginPw").val() == "") {
+						alert("비밀번호를 입력해주세요!");
+						
+						$("#loginPw").focus();
+						return;
+					}
+					
+					$("#loginForm").submit();
+				});
+			});
+		</script>
 	</head>
 	
 	<%
@@ -50,19 +75,19 @@
 					
 					<!-- 본문 -->
 					<div class="card-body">
-						<form method="post" action="<%=request.getContextPath()%>/loginAction.jsp">
+						<form method="post" action="<%=request.getContextPath()%>/loginAction.jsp" id="loginForm">
 							<div class="row">
 								<div class="col">
 									<div class="form-group">
 										<label>관리자 E-mail:</label>
-										<input class="form-control" type="text" name="adminEmail">
+										<input class="form-control" type="text" name="adminEmail" id="loginEmail">
 									</div>
 								</div>
 								
 								<div class="col">
 									<div class="form-group">
 										<label>관리자 비밀번호:</label>
-										<input class="form-control" type="password" name="adminPw">
+										<input class="form-control" type="password" name="adminPw" id="loginPw">
 									</div>
 								</div>
 							</div>
@@ -70,7 +95,7 @@
 							<hr>
 							
 							<div class="form-group">
-								<button class="btn btn-outline-primary btn-block" type="submit">로그인</button>
+								<button class="btn btn-outline-primary btn-block" type="button" id="loginSubmit">로그인</button>
 							</div>
 							
 							<%

@@ -19,6 +19,26 @@
 		
 		<!-- 부트스트랩 사용 -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script>
+			$(document).ready(function() {
+				console.log("document ready");
+				
+				$("#editCategorySubmit").click(function() {
+					console.log("started add category");
+					
+					if ($("#editCategoryName").val() == "") {
+						alert("카테고리 이름을 입력해주세요!");
+						
+						$("#editCategoryName").focus();
+						return;
+					}
+					
+					$("#editCategoryForm").submit();
+				});
+			});
+		</script>
 	</head>
 	
 	<%
@@ -48,18 +68,18 @@
 				
 				<!-- 본문 -->
 				<div class="card-body">
-					<form method="post" action="<%=request.getContextPath()%>/category/editCategoryAction.jsp">
+					<form method="post" action="<%=request.getContextPath()%>/category/editCategoryAction.jsp" id="editCategoryForm">
 						<input type="hidden" name="categoryId" value="<%=category.getCategoryId()%>">
 						
 						<div class="form-group">
 							<label>카테고리 이름:</label>
-							<input class="form-control" type="text" name="categoryName" value="<%=category.getCategoryName()%>">
+							<input class="form-control" type="text" name="categoryName" value="<%=category.getCategoryName()%>" id="editCategoryName">
 						</div>
 						
 						<hr>
 						
 						<div class="form-group">
-							<button class="btn btn-outline-warning btn-block" type="submit">카테고리 수정</button>
+							<button class="btn btn-outline-warning btn-block" type="button" id="editCategorySubmit">카테고리 수정</button>
 						</div>
 					</form>
 				</div>

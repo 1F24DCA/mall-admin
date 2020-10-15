@@ -20,6 +20,36 @@
 		
 		<!-- 부트스트랩 사용 -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script>
+			$(document).ready(function() {
+				console.log("document ready");
+				
+				$("#editProductSubmit").click(function() {
+					console.log("started edit product");
+					
+					if ($("#editProductName").val() == "") {
+						alert("상품 이름을 입력해주세요!");
+						
+						$("#editProductName").focus();
+						return;
+					} else if ($("#editProductPrice").val() == "") {
+						alert("상품 가격을 입력해주세요!");
+						
+						$("#editProductPrice").focus();
+						return;
+					} else if ($("#editProductContent").val() == "") {
+						alert("상품 설명을 입력해주세요!");
+						
+						$("#editProductContent").focus();
+						return;
+					}
+					
+					$("#editProductForm").submit();
+				});
+			});
+		</script>
 	</head>
 	
 	<%
@@ -52,7 +82,7 @@
 				
 				<!-- 본문 -->
 				<div class="card-body">
-					<form method="post" action="<%=request.getContextPath()%>/product/editProductAction.jsp">
+					<form method="post" action="<%=request.getContextPath()%>/product/editProductAction.jsp" id="editProductForm">
 						<input type="hidden" name="productId" value="<%=product.getProductId()%>">
 						
 						<div class="form-group">
@@ -77,23 +107,23 @@
 						
 						<div class="form-group">
 							<label>상품 이름:</label>
-							<input class="form-control" type="text" name="productName" value="<%=product.getProductName()%>">
+							<input class="form-control" type="text" name="productName" value="<%=product.getProductName()%>" id="editProductName">
 						</div>
 						
 						<div class="form-group">
 							<label>가격:</label>
-							<input class="form-control" type="text" name="productPrice" value="<%=product.getProductPrice()%>">
+							<input class="form-control" type="text" name="productPrice" value="<%=product.getProductPrice()%>" id="editProductPrice">
 						</div>
 						
 						<div class="form-group">
 							<label>설명:</label>
-							<textarea class="form-control" rows="5" cols="80" name="productContent"><%=product.getProductContent() %></textarea>
+							<textarea class="form-control" rows="5" cols="80" name="productContent" id="editProductContent"><%=product.getProductContent() %></textarea>
 						</div>
 						
 						<hr>
 						
 						<div class="form-group">
-							<button class="btn btn-outline-warning btn-block" type="submit">상품 수정</button>
+							<button class="btn btn-outline-warning btn-block" type="button" id="editProductSubmit">상품 수정</button>
 						</div>
 					</form>
 				</div>

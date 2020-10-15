@@ -19,6 +19,26 @@
 		
 		<!-- 부트스트랩 사용 -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script>
+			$(document).ready(function() {
+				console.log("document ready");
+				
+				$("#editProductPicSubmit").click(function() {
+					console.log("started edit product pic");
+					
+					if ($("#editProductPic").val() == "") {
+						alert("상품 이미지를 선택해주세요!");
+						
+						$("#editProductPic").focus();
+						return;
+					}
+					
+					$("#editProductPicForm").submit();
+				});
+			});
+		</script>
 	</head>
 	
 	<%
@@ -48,7 +68,7 @@
 				
 				<!-- 본문 -->
 				<div class="card-body">
-					<form method="post" action="<%=request.getContextPath()%>/product/editProductPicAction.jsp" enctype="multipart/form-data">
+					<form method="post" action="<%=request.getContextPath()%>/product/editProductPicAction.jsp" enctype="multipart/form-data" id="editProductPicForm">
 						<input type="hidden" name="productId" value="<%=pac.getProduct().getProductId()%>">
 						
 						<div class="form-group">
@@ -63,13 +83,13 @@
 						
 						<div class="form-group">
 							<label>이미지:</label>
-							<input class="rounded-lg border w-100 p-2" type="file" name="productPic">
+							<input class="rounded-lg border w-100 p-2" type="file" name="productPic" id="editProductPic">
 						</div>
 						
 						<hr>
 						
 						<div class="form-group">
-							<button class="btn btn-outline-primary btn-block" type="submit">이미지 수정</button>
+							<button class="btn btn-outline-primary btn-block" type="button" id="editProductPicSubmit">이미지 수정</button>
 						</div>
 					</form>
 				</div>
